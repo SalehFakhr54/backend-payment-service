@@ -30,8 +30,8 @@ class RequestSenderDouble:
         assert_that(self.last_call['url']).is_equal_to(url) # type: ignore
         
         for key, value in kwargs.items():
-            assert_that(self.last_call['kwargs'].get(key))\ 
-             .is_equal_to(value)
+            assert_that(self.last_call['kwargs'].get(key))\
+            .is_equal_to(value)
 
 
 class CustomAuthDouble:
