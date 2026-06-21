@@ -8,16 +8,12 @@ import api.services.request_service as request_service
 import api.core.exceptions as exceptions
 
 
-class TestGetService(unittest.TestCase):
-    """اختبار Factory function"""
-    
+class TestGetService(unittest.TestCase):    
     def test_lcl_returns_requests_wrapper(self):
-        """✅ env='lcl' → RequestsWrapper"""
         service = request_service.get_service('lcl')
         assert_that(service).is_instance_of(request_service.RequestsWrapper)
     
     def test_non_lcl_returns_wiremock(self):
-        """✅ env != 'lcl' → WiremockRequester"""
         service = request_service.get_service('test')
         assert_that(service).is_instance_of(request_service.WiremockRequester)
         
@@ -25,14 +21,11 @@ class TestGetService(unittest.TestCase):
         assert_that(service).is_instance_of(request_service.WiremockRequester)
 
 
-class TestRequestsWrapper(unittest.TestCase):
-    """اختبار RequestsWrapper"""
-    
+class TestRequestsWrapper(unittest.TestCase):    
     def setUp(self):
         self.mock_requests = Mock()
     
     def test_successful_get_request(self):
-        """✅ GET request success"""
         mock_response = Mock()
         mock_response.status_code = http.HTTPStatus.OK
         self.mock_requests.request = Mock(return_value=mock_response)
@@ -43,7 +36,6 @@ class TestRequestsWrapper(unittest.TestCase):
         assert_that(result.status_code).is_equal_to(200)
     
     def test_successful_post_request(self):
-        """✅ POST request success"""
         mock_response = Mock()
         mock_response.status_code = http.HTTPStatus.OK
         self.mock_requests.request = Mock(return_value=mock_response)
@@ -54,7 +46,6 @@ class TestRequestsWrapper(unittest.TestCase):
         assert_that(result.status_code).is_equal_to(200)
     
     def test_400_error_raises_exception(self):
-        """✅ 400 Bad Request"""
         mock_response = Mock()
         mock_response.status_code = 400
         mock_response.json = Mock(return_value={'error': 'Bad request'})
@@ -66,7 +57,6 @@ class TestRequestsWrapper(unittest.TestCase):
             wrapper.request('GET', 'https://api.example.com/invalid')
     
     def test_401_error_raises_exception(self):
-        """✅ 401 Unauthorized"""
         mock_response = Mock()
         mock_response.status_code = 401
         mock_response.json = Mock(return_value={'error': 'Unauthorized'})
@@ -78,7 +68,6 @@ class TestRequestsWrapper(unittest.TestCase):
             wrapper.request('GET', 'https://api.example.com/protected')
     
     def test_404_error_raises_exception(self):
-        """✅ 404 Not Found"""
         mock_response = Mock()
         mock_response.status_code = 404
         mock_response.json = Mock(return_value={'error': 'Not found'})
@@ -90,7 +79,6 @@ class TestRequestsWrapper(unittest.TestCase):
             wrapper.request('GET', 'https://api.example.com/missing')
     
     def test_500_error_raises_exception(self):
-        """✅ 500 Server Error"""
         mock_response = Mock()
         mock_response.status_code = 500
         mock_response.json = Mock(return_value={'error': 'Server error'})
@@ -103,7 +91,6 @@ class TestRequestsWrapper(unittest.TestCase):
     
     @patch('api.services.request_service.logging')
     def test_logging_info_on_success(self, mock_logging):
-        """✅ Logging info on success"""
         mock_response = Mock()
         mock_response.status_code = http.HTTPStatus.OK
         self.mock_requests.request = Mock(return_value=mock_response)

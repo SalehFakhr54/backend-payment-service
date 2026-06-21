@@ -38,11 +38,9 @@ class WiremockRequester:
         logging.info(f'[{method}] (wiremock) {self._wiremock_url}/{url} with kwargs: {kwargs}')
         wiremock_url = f'{self._wiremock_url}/{url}'
         response = self._requests.request(method, wiremock_url, **kwargs)
-        # ✅ أضف error handling!
         return self._handle_response(response, method, wiremock_url, **kwargs)
     
     def _handle_response(self, response, method, url, **kwargs):
-        """✅ نفس الـ error handling"""
         if response.status_code != http.HTTPStatus.OK:
             logging.error(f'[{method}] (wiremock) {url} with kwargs: {kwargs}')
             raise exceptions.ResponseError(response)

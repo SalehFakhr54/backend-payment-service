@@ -1,7 +1,6 @@
-# في tests/doubles/requests.py
+
 
 class MockResponse:
-    """محاكاة Response object"""
     def __init__(self, json_data=None, status_code=200):
         self._json_data = json_data or {}
         self.status_code = status_code
@@ -11,7 +10,6 @@ class MockResponse:
 
 
 class RequestSenderDouble:
-    """محاكاة request sender"""
     def __init__(self, json=None, status_code=200):
         self.last_call = None
         self.response = MockResponse(json, status_code)
@@ -37,20 +35,17 @@ class RequestSenderDouble:
 
 
 class CustomAuthDouble:
-    """✅ محاكاة Auth Double"""
     def __init__(self, token):
         self.token = token
         self.called = False
     
     @property
     def headers(self):
-        """أرجع الـ headers"""
         self.called = True
         return {
             "Authorization": f"Bearer {self.token}"
         }
     
     def assert_that_headers_were_called(self):
-        """تحقق: اتنادت headers"""
         from assertpy import assert_that
         assert_that(self.called).is_true()
